@@ -1,0 +1,144 @@
+<%- include("../layouts/parteSuperior.ejs") %>
+<style>
+    .acciones{
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-Agregar{
+        width: 10%;
+        margin-left: 2.5%;
+    }
+  
+
+
+ 
+</style>
+
+    <a href="#" class="btn btn-success btn-Agregar mt-5" data-bs-toggle="modal" data-bs-target="#ventaModal">Agregar</a>
+
+
+<div class="card mb-4 mt-5" style="width: 95%; margin: 0 auto;">
+       <div class="card-header headTable">
+        <i class="fas fa-table me-1"></i>
+        Tabla De Ventas
+        
+    </div>
+    <div class="card-body">
+          <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th class="text-center">Id</th>
+                    <th class="text-center">Descripcion</th>
+                    <th class="text-center">Monto</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Acciones</th>
+                   
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th class="text-center">Id</th>
+                    <th class="text-center">Descripcion</th>
+                    <th class="text-center">Monto</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                    <% ventas.forEach((venta)=>{ %>
+                           <tr>
+                               <td class="text-center"><%= venta.id %></td>
+                               <td class="text-center"><%= venta.descripcion %></td>
+                               <td class="text-center"><%= venta.monto %></td>
+                               <td class="text-center"><%= venta.cantidad %></td>                                    <!-- ventas/eliminar/<%= venta.id %> -->       
+                               <td class="text-center"><%= venta.fecha %></td>
+                               <td class="acciones text-center"><a href="ventas/editarVenta/<%= venta.id %>" class="btn btn-primary"><i class="far fa-edit"></i></a><a class="btn btn-danger" onclick="confirmarEliminacion(<%= venta.id %>)"><i class="far fa-trash-alt"></i></a></td>
+                           </tr> 
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+
+  
+  <!-- Modal Para Formulario de venta -->
+  <div class="modal fade" id="ventaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form action="/ventas" method="POST">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Registrar Venta</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- Cuerpo del Modal -->
+              <div class="row g-3">
+                
+                <div class="col-8">
+                    <select name="seleccion" class="form-select" aria-label="Default select example">
+                        <option disabled selected>--Seleccione producto--</option>
+                        <option>Otro</option>
+                        <option value="Hamburguesa Comun">Hamburguesa Comun</option>
+                        <option value="Hamburguesa Especial">Hamburguesa Especial</option>
+                        <option value="Hamburguesa Super">Hamburguesa Super</option>
+                        <option value="Hamburguesa Con Chedar">Hamburguesa Con Chedar</option>
+                        <option value="Com x 3">Hamburguesa Comun x 3</option>
+                        <option value="Esp x 3">Hamburguesa Especial x 3</option>
+                        <option value="Sup x 3">Hamburguesa Super x 3</option>
+                        <option value="Sandwich De Milanesa">Sandwich De Milanesa</option>
+                        <option value="Papas Fritas">Papas Fritas</option>
+                        <option value="Carlito">Carlito</option>
+                      </select>
+                </div>
+                <div class="col">
+                  <input type="number" class="form-control" placeholder="Cantidad" name="cantidad" aria-label="cantidad">
+                </div>
+                <div class="col">
+                      <input name="fecha" type="date" 
+                      min="2021-01-01" max="2090-12-31"
+                      >  
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    function confirmarEliminacion(id){
+      Swal.fire({
+  title: '¿Seguro que desea eliminar la venta '+id+'?',
+  icon: 'warning',
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  showCancelButton: true,
+  cancelButtonText: 'Cancelar',
+  confirmButtonText: 'Eliminar',
+  
+  
+}).then((result) => {
+  if (result.isConfirmed) {
+ 
+    window.location = '/ventas/eliminar/'+id;
+    
+    
+  } 
+})
+    }
+  
+  </script>
+<%- include("../layouts/parteInferior.ejs") %>
